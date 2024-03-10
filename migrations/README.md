@@ -1,0 +1,1 @@
+- [DB Schema](https://drive.google.com/file/d/1Ko0AT8uNz0bPKFwKxLztMn6k77T__1uU/view?usp=drive_link)
