@@ -35,7 +35,6 @@ CREATE TABLE turns (
   CONSTRAINT FK_user_games FOREIGN KEY (user_email, game_id) REFERENCES user_games(user_email, game_id)
 );
 
--- TODO: a trigger that automatically assigns a player_no to a user game when a user_games entry is inserted
 DELIMITER $$
 
 CREATE TRIGGER assign_player_no
