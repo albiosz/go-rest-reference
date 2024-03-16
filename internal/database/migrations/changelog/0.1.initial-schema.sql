@@ -54,4 +54,33 @@ BEGIN
   VALUES (NEW.created_by, NEW.id);
 END$$
 
+CREATE PROCEDURE clear_db()
+BEGIN
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE current_table VARCHAR(100) DEFAULT "";
+
+  DECLARE cursor_table CURSOR FOR
+  SELECT table_name FROM information_schema.tables WHERE table_schema = 'honeycombs';
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+  SET FOREIGN_KEY_CHECKS = 0;
+
+  OPEN cursor_table;
+  truncate_loop: LOOP
+    FETCH cursor_table INTO current_table;
+    IF done THEN
+      LEAVE truncate_loop;
+    END IF;
+
+    SET @sql = CONCAT('TRUNCATE TABLE ', current_table);
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+  END LOOP;
+  CLOSE cursor_table;
+
+  SET FOREIGN_KEY_CHECKS = 1;
+END$$
+
 DELIMITER ;

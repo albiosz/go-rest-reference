@@ -9,13 +9,11 @@ import (
 	"github.com/go-sql-driver/mysql"
 )
 
-var db *sql.DB
+type DB struct {
+	SqlDB *sql.DB
+}
 
-func Get() *sql.DB {
-	if db != nil {
-		return db
-	}
-
+func Get() *DB {
 	cfg := mysql.Config{
 		User:   os.Getenv("DB_USERNAME"),
 		Passwd: os.Getenv("DB_PASSWORD"),
@@ -25,11 +23,15 @@ func Get() *sql.DB {
 	}
 
 	var err error
-	db, err = sql.Open("mysql", cfg.FormatDSN())
+	sqlDB, err := sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Println("Connected to database:", cfg.FormatDSN())
-	return db
+	return &DB{SqlDB: sqlDB}
+}
+
+func (db *DB) Clear() {
+	db.SqlDB.Exec("call clear_db;")
 }

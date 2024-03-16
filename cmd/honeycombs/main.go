@@ -17,5 +17,5 @@ func main() {
 	}
 
 	db := database.Get()
-	defer db.Close()
+	defer db.SqlDB.Close()
 }
