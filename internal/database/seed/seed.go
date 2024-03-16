@@ -6,7 +6,7 @@ func insertUsers(db *sql.DB) {
 	result, err := db.Exec(
 		`INSERT INTO honeycombs.users (email, password, nickname)
 		VALUES ('user1@mail.com', 'password1', 'user1'),
-			('user2@mail.com', 'password2', 'user2');
+			('user2@mail.com', 'password2', 'user2'); -- user without any games, no FK, can be deleted
 	`)
 	if err != nil {
 		panic(err)

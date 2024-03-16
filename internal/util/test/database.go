@@ -7,10 +7,15 @@ import (
 	"github.com/albiosz/honeycombs/internal/util"
 )
 
-func SetupTestDB() *database.DB {
+func SetupDB() *database.DB {
 	config.SetupEnvVariables(util.ProjectRoot() + "/.env")
 	db := database.Get()
 	db.Clear()
 	seed.InsertAll(db.SqlDB)
 	return db
+}
+
+func RestoreDB(db *database.DB) {
+	db.Clear()
+	seed.InsertAll(db.SqlDB)
 }
