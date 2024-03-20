@@ -15,6 +15,14 @@ type UserRepository interface {
 	Delete(id uint) error
 }
 
+type UserService interface {
+	FindByID(id uint) (*User, error)
+	Find() ([]*User, error)
+	Create(user *User) (*User, error)
+	Update(id uint, updates UserUpdate) (*User, error)
+	Delete(id uint) error
+}
+
 type UserUpdate struct {
 	Email    *string
 	Password *string
