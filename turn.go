@@ -4,8 +4,8 @@ import "time"
 
 type Turn struct {
 	ID        uint
-	UserEmail string
+	UserID    uint
 	GameID    uint
 	CreatedAt time.Time
-	Points    uint
+	Points    uint8
 }

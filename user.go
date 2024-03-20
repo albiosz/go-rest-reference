@@ -1,21 +1,22 @@
 package honeycombs
 
 type User struct {
-	// ID int - it would be probably a better PK, because it would allow to change the Email
+	ID       uint
 	Email    string
 	Password string
 	Nickname string
 }
 
 type UserRepository interface {
-	FindByEmail(email string) (*User, error)
+	FindByID(id uint) (*User, error)
 	Find() ([]*User, error)
 	Create(user *User) (*User, error)
-	Update(email string, updates UserUpdate) (*User, error)
-	Delete(email string) error
+	Update(id uint, updates UserUpdate) (*User, error)
+	Delete(id uint) error
 }
 
 type UserUpdate struct {
+	Email    *string
 	Password *string
 	Nickname *string
 }

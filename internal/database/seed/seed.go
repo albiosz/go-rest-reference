@@ -5,8 +5,8 @@ import "database/sql"
 func insertUsers(db *sql.DB) {
 	result, err := db.Exec(
 		`INSERT INTO honeycombs.users (email, password, nickname)
-		VALUES ('user1@mail.com', 'password1', 'user1'),
-			('user2@mail.com', 'password2', 'user2'); -- user without any games, no FK, can be deleted
+		VALUES ('user1@mail.com', 'password1', 'user1'), -- id = 1
+			('user2@mail.com', 'password2', 'user2'); -- id = 2, user without any games, no FK, can be deleted
 	`)
 	if err != nil {
 		panic(err)
@@ -21,7 +21,7 @@ func insertUsers(db *sql.DB) {
 func insertGames(db *sql.DB) {
 	result, err := db.Exec(
 		`INSERT INTO honeycombs.games (created_by)
-		VALUES ('user1@mail.com');
+		VALUES (1);
 	`)
 	if err != nil {
 		panic(err)

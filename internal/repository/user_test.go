@@ -16,7 +16,7 @@ func TestFindByEmail(t *testing.T) {
 	userRepo := NewUser(db)
 
 	t.Run("user exists", func(t *testing.T) {
-		user, err := userRepo.FindByEmail("user1@mail.com")
+		user, err := userRepo.FindByID(1)
 
 		assert.NoError(t, err)
 		assert.Equal(t, "user1@mail.com", user.Email)
@@ -25,7 +25,7 @@ func TestFindByEmail(t *testing.T) {
 	})
 
 	t.Run("user does not exist", func(t *testing.T) {
-		user, err := userRepo.FindByEmail("not-existent-email")
+		user, err := userRepo.FindByID(99999)
 
 		assert.Error(t, err)
 		assert.ErrorIs(t, err, errs.ErrResourceNotFound)
@@ -68,7 +68,7 @@ func TestCreate(t *testing.T) {
 
 		createdUser, err := userRepo.Create(&newUser)
 		assert.NoError(t, err)
-		assert.Empty(t, createdUser)
+		assert.NotEmpty(t, createdUser.ID)
 	})
 
 	t.Run("success", func(t *testing.T) {
@@ -94,17 +94,17 @@ func TestUpdate(t *testing.T) {
 	}
 
 	t.Run("fail - incorrect emial", func(t *testing.T) {
-		incorrectEmail := "incorrect@email.com"
+		incorrectID := uint(9999)
 
-		updatedUser, err := userRepo.Update(incorrectEmail, userUpdate)
+		updatedUser, err := userRepo.Update(incorrectID, userUpdate)
 		assert.Error(t, err)
 		assert.Nil(t, updatedUser)
 	})
 
 	t.Run("success", func(t *testing.T) {
-		email := "user1@mail.com"
+		correctID := uint(1)
 
-		updatedUser, err := userRepo.Update(email, userUpdate)
+		updatedUser, err := userRepo.Update(correctID, userUpdate)
 		assert.NoError(t, err)
 		assert.Equal(t, *userUpdate.Password, updatedUser.Password)
 	})
@@ -116,22 +116,22 @@ func TestDelete(t *testing.T) {
 	userRepo := NewUser(db)
 
 	t.Run("fail - email does not exist", func(t *testing.T) {
-		const email = "does@not.exist"
-		err := userRepo.Delete(email)
+		const incorrectID = 9999
+		err := userRepo.Delete(incorrectID)
 		assert.NoError(t, err)
 	})
 
 	t.Run("success", func(t *testing.T) {
-		const email = "user2@mail.com"
+		const correctID = 2
 
-		userBeforeDelete, err := userRepo.FindByEmail(email)
+		userBeforeDelete, err := userRepo.FindByID(correctID)
 		assert.NoError(t, err)
 		assert.NotEmpty(t, userBeforeDelete)
 
-		err = userRepo.Delete(email)
+		err = userRepo.Delete(correctID)
 		assert.NoError(t, err)
 
-		userAfterDelete, err := userRepo.FindByEmail(email)
+		userAfterDelete, err := userRepo.FindByID(correctID)
 		assert.Error(t, err)
 		assert.Nil(t, userAfterDelete)
 	})

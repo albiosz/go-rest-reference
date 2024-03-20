@@ -3,13 +3,12 @@ package database
 import (
 	"testing"
 
-	"github.com/albiosz/honeycombs/internal/config"
 	"github.com/albiosz/honeycombs/internal/util"
 	"github.com/stretchr/testify/assert"
 )
 
 func setupTestDB() *DB {
-	config.SetupEnvVariables(util.ProjectRoot() + "/.env")
+	util.SetupEnvVariables(util.ProjectRoot() + "/.env")
 	return Get()
 }
 

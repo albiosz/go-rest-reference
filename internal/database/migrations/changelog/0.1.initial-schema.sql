@@ -3,36 +3,37 @@ CREATE DATABASE honeycombs;
 USE honeycombs;
 
 CREATE TABLE users (
-  email VARCHAR(255) PRIMARY KEY,
+  id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
-  nickname VARCHAR(255) NOT NULL
+  nickname VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE games (
   id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  created_by VARCHAR(255) NOT NULL REFERENCES users(email),
+  created_by INT UNSIGNED NOT NULL REFERENCES users(id),
   state ENUM('CREATED', 'IN_PROGRESS', 'FINISHED') NOT NULL DEFAULT 'CREATED',
-  playing_user VARCHAR(255) REFERENCES users(email)
+  playing_user INT UNSIGNED REFERENCES users(id)
 );
 
 CREATE TABLE user_games (
-  user_email VARCHAR(255) REFERENCES users(email),
+  user_id INT UNSIGNED REFERENCES users(id),
   game_id INT UNSIGNED REFERENCES games(id),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   player_no TINYINT UNSIGNED NOT NULL,
   state ENUM('ACTIVE', 'FINISHED') NOT NULL DEFAULT 'ACTIVE',
-  CONSTRAINT PK_user_games PRIMARY KEY (user_email, game_id),
+  CONSTRAINT PK_user_games PRIMARY KEY (user_id, game_id),
   UNIQUE (game_id, player_no)
 );
 
 CREATE TABLE turns (
   id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-  user_email VARCHAR(255) NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
   game_id INT UNSIGNED NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   points TINYINT UNSIGNED NOT NULL DEFAULT 0,
-  CONSTRAINT FK_user_games FOREIGN KEY (user_email, game_id) REFERENCES user_games(user_email, game_id)
+  CONSTRAINT FK_user_games FOREIGN KEY (user_id, game_id) REFERENCES user_games(user_id, game_id)
 );
 
 DELIMITER $$
@@ -50,7 +51,7 @@ CREATE TRIGGER create_user_game
 AFTER INSERT
 ON games FOR EACH ROW
 BEGIN
-  INSERT INTO user_games (user_email, game_id)
+  INSERT INTO user_games (user_id, game_id)
   VALUES (NEW.created_by, NEW.id);
 END$$
 

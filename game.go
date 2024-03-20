@@ -11,10 +11,10 @@ const (
 )
 
 type Game struct {
-	ID               uint
-	CreatedAt        time.Time
-	CreatedByEmail   string
-	CreatedBy        *User
-	State            GameState
-	PlayingUserEmail *string
+	ID            uint
+	CreatedAt     time.Time
+	CreatedByID   uint
+	CreatedBy     *User
+	State         GameState
+	PlayingUserID *uint
 }

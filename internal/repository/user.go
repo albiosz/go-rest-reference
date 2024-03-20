@@ -18,10 +18,10 @@ func NewUser(db *database.DB) *User {
 	return &User{db: db}
 }
 
-func (u *User) FindByEmail(email string) (*honeycombs.User, error) {
+func (u *User) FindByID(id uint) (*honeycombs.User, error) {
 	user := &honeycombs.User{}
-	row := u.db.SqlDB.QueryRow("SELECT email, password, nickname FROM users WHERE email = ?", email)
-	if err := row.Scan(&user.Email, &user.Password, &user.Nickname); err != nil {
+	row := u.db.SqlDB.QueryRow("SELECT id, email, password, nickname FROM users WHERE id = ?", id)
+	if err := row.Scan(&user.ID, &user.Email, &user.Password, &user.Nickname); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errs.ErrResourceNotFound
 		}
@@ -67,7 +67,12 @@ func (u *User) Create(user *honeycombs.User) (*honeycombs.User, error) {
 		return nil, err
 	}
 
-	createdUser, err := u.FindByEmail(user.Email)
+	lastInsertedID, err := result.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+
+	createdUser, err := u.FindByID(uint(lastInsertedID))
 	if err != nil {
 		return nil, err
 	}
@@ -75,8 +80,8 @@ func (u *User) Create(user *honeycombs.User) (*honeycombs.User, error) {
 	return createdUser, nil
 }
 
-func (u *User) Update(email string, updates honeycombs.UserUpdate) (*honeycombs.User, error) {
-	user, err := u.FindByEmail(email)
+func (u *User) Update(id uint, updates honeycombs.UserUpdate) (*honeycombs.User, error) {
+	user, err := u.FindByID(id)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +101,7 @@ func (u *User) Update(email string, updates honeycombs.UserUpdate) (*honeycombs.
 		return nil, err
 	}
 
-	updateUser, err := u.FindByEmail(email)
+	updateUser, err := u.FindByID(id)
 	if err != nil {
 		return nil, err
 	}
@@ -104,8 +109,8 @@ func (u *User) Update(email string, updates honeycombs.UserUpdate) (*honeycombs.
 	return updateUser, nil
 }
 
-func (u *User) Delete(email string) error {
-	_, err := u.db.SqlDB.Exec("DELETE FROM users WHERE email = ?", email)
+func (u *User) Delete(id uint) error {
+	_, err := u.db.SqlDB.Exec("DELETE FROM users WHERE id = ?", id)
 	if err != nil {
 		return err
 	}

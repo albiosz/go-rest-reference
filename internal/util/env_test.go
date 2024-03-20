@@ -1,17 +1,16 @@
-package config
+package util
 
 import (
 	"os"
 	"testing"
 
-	"github.com/albiosz/honeycombs/internal/util"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestSetupEnvVariables(t *testing.T) {
 
 	t.Run("file exists", func(t *testing.T) {
-		projectRoot := util.ProjectRoot()
+		projectRoot := ProjectRoot()
 
 		err := SetupEnvVariables(projectRoot + "/.env")
 

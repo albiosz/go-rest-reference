@@ -10,8 +10,8 @@ const (
 )
 
 type UserGame struct {
-	UserEmail string
-	GameID    uint8
+	UserID    uint
+	GameID    uint
 	CreatedAt time.Time
 	PlayerNo  uint8
 	State     UserGameState
