@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/albiosz/honeycombs/internal/database"
 	"github.com/albiosz/honeycombs/internal/util"
@@ -17,4 +18,7 @@ func main() {
 
 	db := database.Get()
 	defer db.SqlDB.Close()
+
+	mux := getRouter(db)
+	http.ListenAndServe(":8080", mux)
 }
