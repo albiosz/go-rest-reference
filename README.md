@@ -1,4 +1,4 @@
-# Honeycombs Go: REST API Reference
+# Go REST API Reference
 
 ## 📋 Project Overview
 This repository serves as a reference implementation of a **REST API** built using Go, demonstrating **best practices in Go** application architecture and development.
