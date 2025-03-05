@@ -16,5 +16,7 @@ This repository serves as a reference implementation of a **REST API** built usi
 - **Dependency injection** for loose coupling
 - **Clear separation** between domain logic and infrastructure components
 
-## 🚦 Current Status
-**Note:** While this project is no longer actively developed, it remains a valuable showcase of Go development practices. The project has been succeeded by a Java + Spring implementation - [honeycombs](https://github.com/albiosz/honeycombs).
+## 📜 History of the Project
+Initially, this project was conceived as an assistant application for the board game Honeycombs. After some time, I made the decision to transition the project to Java with Spring Framework. This pivot was motivated by Java's more mature and standardized ecosystem.
+
+The project's successor can be found here: [honeycombs](https://github.com/albiosz/honeycombs)
